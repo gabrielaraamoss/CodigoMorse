@@ -1,40 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-    <actions>
+<actions>
         <action>
             <actionName>run</actionName>
             <packagings>
                 <packaging>jar</packaging>
             </packagings>
             <goals>
-                <goal>clean</goal>
-                <goal>javafx:run</goal>
-            </goals>
-        </action>
-        <action>
-            <actionName>debug</actionName>
-            <goals>
-                <goal>clean</goal>
-                <goal>javafx:run@ide-debug</goal>
+                <goal>process-classes</goal>
+                <goal>org.codehaus.mojo:exec-maven-plugin:1.5.0:java</goal>
             </goals>
             <properties>
-                <jpda.listen>true</jpda.listen>
+                <exec.args>-classpath %classpath ec.edu.espol.gui.App</exec.args>
+                <exec.executable>java</exec.executable>
             </properties>
-        </action>
-        <action>
-            <actionName>profile</actionName>
-            <goals>
-                <goal>clean</goal>
-                <goal>javafx:run@ide-profile</goal>
-            </goals>
-        </action>
-        <action>
-            <actionName>CUSTOM-jlink</actionName>
-            <displayName>jlink</displayName>
-            <goals>
-                <goal>clean</goal>
-                <!-- compile not needed with javafx-maven-plugin v0.0.5 -->
-                <goal>compile</goal>
-                <goal>javafx:jlink</goal>
-            </goals>
         </action>
     </actions>
