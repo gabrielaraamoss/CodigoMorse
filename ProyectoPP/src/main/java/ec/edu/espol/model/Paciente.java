@@ -5,25 +5,22 @@
  */
 package ec.edu.espol.model;
 
+
 /**
  *
  * @author gabrielaramos
  */
-public class Paciente {
-    private String nombre;
-    private String apellido;
+public class Paciente extends Usuario {
     private int edad;
     private char genero;
     private Sintoma sintoma;
 
     public Paciente(String nombre, String apellido, int edad, char genero, Sintoma sintoma) {
-        this.nombre = nombre;
-        this.apellido = apellido;
+        super(nombre,apellido);
         this.edad = edad;
         this.genero = genero;
         this.sintoma = sintoma;
     }
-    
-    
+           
     
 }

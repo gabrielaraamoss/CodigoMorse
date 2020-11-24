@@ -9,16 +9,13 @@ package ec.edu.espol.model;
  *
  * @author gabrielaramos
  */
-public class Medico {
-    private String nombres;
-    private String apellidos;
+public class Medico extends Usuario{
     private String especialidad;
+    private Puesto puesto;
 
     public Medico(String nombres, String apellidos, String especialidad) {
-        this.nombres = nombres;
-        this.apellidos = apellidos;
+        super(nombres,apellidos);
         this.especialidad = especialidad;
     }
-    
-    
+      
 }

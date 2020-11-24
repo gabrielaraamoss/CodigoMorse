@@ -1,3 +1,8 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
 package ec.edu.espol.model;
 
 import java.io.FileInputStream;
@@ -8,30 +13,22 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
-import java.util.List;
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 
 /**
  *
  * @author gabrielaramos
  */
-public class Puesto implements Serializable {
-    private int codigo;
-    private List<Turno> turnos;
-    private Medico medico;
+public class Usuario implements Serializable {
+    protected String nombres;
+    protected String apellidos;
 
-    public Puesto(int codigo, List<Turno> turnos, Medico medico) {
-        this.codigo = codigo;
-        this.turnos = turnos;
-        this.medico = medico;
+    public Usuario(String nombres, String apellidos) {
+        this.nombres = nombres;
+        this.apellidos = apellidos;
     }
-
- public static void guardar(ArrayList<Puesto> arraylist,String archivo){
+    
+    
+    public static void guardar(ArrayList<Usuario> arraylist,String archivo){
         try(ObjectOutputStream es = new ObjectOutputStream(new FileOutputStream(archivo))){
             try{
                 if (arraylist.size()<=0){
@@ -52,11 +49,10 @@ public class Puesto implements Serializable {
     
     }
     
-    
-    public static ArrayList<Puesto> leer(String archivo) throws ClassNotFoundException{
-        ArrayList<Puesto> puestos=new ArrayList<>();
+    public static ArrayList<Usuario> leer(String archivo) throws ClassNotFoundException{
+        ArrayList<Usuario> usuarios=new ArrayList<>();
         try(ObjectInputStream es = new ObjectInputStream(new FileInputStream(archivo))){
-            puestos=(ArrayList<Puesto>)es.readObject();
+            usuarios=(ArrayList<Usuario>)es.readObject();
             es.close();
 
         }catch (FileNotFoundException e){
@@ -64,9 +60,12 @@ public class Puesto implements Serializable {
         }catch(IOException e){
             System.out.println(e.getMessage());
         } 
-        return puestos;
+        return usuarios;
       
-    }           
+    }   
+    
+    
+    
     
     
 }
