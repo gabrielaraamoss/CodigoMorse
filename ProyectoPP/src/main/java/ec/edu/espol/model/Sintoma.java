@@ -28,26 +28,26 @@ public class Sintoma  implements Serializable{
     }
     
 
-//    public static void guardar(ArrayList<Sintoma> arraylist,String archivo){
-//        try(ObjectOutputStream es = new ObjectOutputStream(new FileOutputStream(archivo))){
-//            try{
-//                if (arraylist.size()<=0){
-//                    throw new ErrorEmptyList(arraylist.size());
-//                }else{             
-//                    es.writeObject(arraylist);
-//                    es.close();
-//                }
-//                
-//            }catch(ErrorEmptyList e){
-//                System.out.println(e);
-//            }
-//        }catch (FileNotFoundException e){
-//            System.out.println(e.getMessage());
-//        }catch(IOException e){
-//            System.out.println(e.getMessage());
-//        }
-//    
-//    }
+    public static void guardar(ArrayList<Sintoma> arraylist,String archivo){
+        try(ObjectOutputStream es = new ObjectOutputStream(new FileOutputStream(archivo))){
+            try{
+                if (arraylist.size()<=0){
+                    throw new ErrorEmptyList(arraylist.size());
+                }else{             
+                    es.writeObject(arraylist);
+                    es.close();
+                }
+                
+            }catch(ErrorEmptyList e){
+                System.out.println(e);
+            }
+        }catch (FileNotFoundException e){
+            System.out.println(e.getMessage());
+        }catch(IOException e){
+            System.out.println(e.getMessage());
+        }
+    
+    }
     
     public static ArrayList<Sintoma> leer(String archivo) throws ClassNotFoundException{
         ArrayList<Sintoma> sintomas=new ArrayList<>();
@@ -63,5 +63,13 @@ public class Sintoma  implements Serializable{
         return sintomas;
       
     }        
+
+      
+    @Override
+    public String toString() {
+        return nombre + "|" + prioridad;
+    }
+    
+
     
 }

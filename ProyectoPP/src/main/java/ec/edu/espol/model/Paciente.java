@@ -5,6 +5,8 @@
  */
 package ec.edu.espol.model;
 
+import java.util.ArrayList;
+
 
 /**
  *
@@ -13,14 +15,15 @@ package ec.edu.espol.model;
 public class Paciente extends Usuario {
     private int edad;
     private char genero;
-    private Sintoma sintoma;
+    private String sintoma;
 
-    public Paciente(String nombre, String apellido, int edad, char genero, Sintoma sintoma) {
+    public Paciente(String nombre, String apellido, int edad, char genero, String sintoma) {
         super(nombre,apellido);
         this.edad = edad;
         this.genero = genero;
         this.sintoma = sintoma;
     }
-           
+
+
     
 }
