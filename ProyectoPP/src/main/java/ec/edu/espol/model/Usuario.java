@@ -35,7 +35,6 @@ public class Usuario implements Serializable {
                     throw new ErrorEmptyList(arraylist.size());
                 }else{             
                     es.writeObject(arraylist);
-                    es.close();
                 }
                 
             }catch(ErrorEmptyList e){
@@ -53,7 +52,6 @@ public class Usuario implements Serializable {
         ArrayList<Usuario> usuarios=new ArrayList<>();
         try(ObjectInputStream es = new ObjectInputStream(new FileInputStream(archivo))){
             usuarios=(ArrayList<Usuario>)es.readObject();
-            es.close();
 
         }catch (FileNotFoundException e){
             System.out.println(e.getMessage());

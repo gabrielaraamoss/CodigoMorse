@@ -64,7 +64,7 @@
                   <Font name="Times New Roman" size="13.0" />
                </font>
             </Text>
-            <Text layoutX="44.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="SINTOMA">
+            <Text layoutX="44.0" layoutY="130.0" strokeType="OUTSIDE" strokeWidth="0.0" text="ESPECIALIDAD">
                <font>
                   <Font name="Times New Roman" size="13.0" />
                </font>

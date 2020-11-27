@@ -67,6 +67,16 @@ public class VentanaFXMLController implements Initializable {
 
     @FXML
     private void regresar(MouseEvent event) {
+        try {
+            FXMLLoader fxmlloader1 = App.loadFXMLoad("PrincipalFXML");
+            App.setRoot(fxmlloader1);
+
+        }catch (IOException ex) {
+            Alert alerta = new Alert(Alert.AlertType.INFORMATION, "ERROR");
+            alerta.show();
+        }            
+                
+        
     }
 
     @FXML

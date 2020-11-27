@@ -52,7 +52,7 @@ public class RegistroMedicoFXMLController implements Initializable {
     @FXML
     private void regresar(MouseEvent event) {
         try {
-            FXMLLoader fxmlloader1 = App.loadFXMLoad("VentanaFXML");
+            FXMLLoader fxmlloader1 = App.loadFXMLoad("PrincipalFXML");
             App.setRoot(fxmlloader1);
 
         }catch (IOException ex) {

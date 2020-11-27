@@ -25,9 +25,9 @@ public class Puesto implements Serializable {
     private List<Turno> turnos;
     private Medico medico;
 
-    public Puesto(int codigo, List<Turno> turnos, Medico medico) {
+    public Puesto(int codig, Medico medico) {
         this.codigo = codigo;
-        this.turnos = turnos;
+        this.turnos = new ArrayList<>();
         this.medico = medico;
     }
 
@@ -38,7 +38,6 @@ public class Puesto implements Serializable {
                     throw new ErrorEmptyList(arraylist.size());
                 }else{             
                     es.writeObject(arraylist);
-                    es.close();
                 }
                 
             }catch(ErrorEmptyList e){
@@ -57,7 +56,6 @@ public class Puesto implements Serializable {
         ArrayList<Puesto> puestos=new ArrayList<>();
         try(ObjectInputStream es = new ObjectInputStream(new FileInputStream(archivo))){
             puestos=(ArrayList<Puesto>)es.readObject();
-            es.close();
 
         }catch (FileNotFoundException e){
             System.out.println(e.getMessage());

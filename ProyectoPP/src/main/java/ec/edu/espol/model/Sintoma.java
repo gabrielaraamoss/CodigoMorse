@@ -35,7 +35,6 @@ public class Sintoma  implements Serializable{
                     throw new ErrorEmptyList(arraylist.size());
                 }else{             
                     es.writeObject(arraylist);
-                    es.close();
                 }
                 
             }catch(ErrorEmptyList e){
@@ -53,7 +52,6 @@ public class Sintoma  implements Serializable{
         ArrayList<Sintoma> sintomas=new ArrayList<>();
         try(ObjectInputStream es = new ObjectInputStream(new FileInputStream(archivo))){
             sintomas=(ArrayList<Sintoma>)es.readObject();
-            es.close();
 
         }catch (FileNotFoundException e){
             System.out.println(e.getMessage());
