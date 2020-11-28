@@ -13,6 +13,7 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -28,6 +29,7 @@ public class Sintoma  implements Serializable{
     }
     
 
+    
     public static void guardar(ArrayList<Sintoma> arraylist,String archivo){
         try(ObjectOutputStream es = new ObjectOutputStream(new FileOutputStream(archivo))){
             try{

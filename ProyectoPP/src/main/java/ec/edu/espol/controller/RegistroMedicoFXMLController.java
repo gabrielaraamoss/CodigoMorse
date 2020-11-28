@@ -27,8 +27,6 @@ import javafx.scene.input.MouseEvent;
  * @author gabrielaramos
  */
 public class RegistroMedicoFXMLController implements Initializable {
-
-
     @FXML
     private TextField nombre;
     @FXML
@@ -77,31 +75,24 @@ public class RegistroMedicoFXMLController implements Initializable {
     }
 
     @FXML
-    private void puesto(MouseEvent event) {
-    }
-
-    @FXML
     private void registrar(MouseEvent event) {
         if(nombre.getText().isEmpty()||apellido.getText().isEmpty()||cbxS.getValue()==null){
-                if(nombre.getText().isEmpty()){
-                    Alert a1=new Alert(Alert.AlertType.INFORMATION,"INGRESE NOMBRES");
-                    a1.show();
-                }
-                else if(apellido.getText().isEmpty()){
-                    Alert a2=new Alert(Alert.AlertType.INFORMATION,"INGRESE APELLIDOS");
-                    a2.show();
-                }
-                else if(cbxS.getValue()==null){
-                    Alert a3=new Alert(Alert.AlertType.INFORMATION,"SELECCIONE");
-                    a3.show();
-                
-                }
-                
-            Alert a=new Alert(Alert.AlertType.INFORMATION,"INGRESE DATOS");
-            a.show();
-          
+            if(nombre.getText().isEmpty()){
+                Alert a1=new Alert(Alert.AlertType.INFORMATION,"INGRESE NOMBRES");
+                a1.show();
             }
-        else{
+            else if(apellido.getText().isEmpty()){
+                Alert a2=new Alert(Alert.AlertType.INFORMATION,"INGRESE APELLIDOS");
+                a2.show();
+            }
+            else if(cbxS.getValue()==null){
+                Alert a3=new Alert(Alert.AlertType.INFORMATION,"SELECCIONE");
+                a3.show();
+            }
+                
+        Alert a=new Alert(Alert.AlertType.INFORMATION,"INGRESE DATOS");
+        a.show();
+        }else{
             Medico medico = new Medico(nombre.getText(),apellido.getText(),cbxS.getValue().toString());
             try{
                 ArrayList<Usuario> medicos = Medico.leer("medicos.ser");
@@ -117,9 +108,20 @@ public class RegistroMedicoFXMLController implements Initializable {
         }           
         nombre.clear();
         apellido.clear();
-        cbxS.setValue("");        
-  
-        
+        cbxS.setValue("");          
+    }
+
+    @FXML
+    private void puesto(MouseEvent event) {
+        try {
+            FXMLLoader fxmlloader1 = App.loadFXMLoad("PuestoFXML");
+            App.setRoot(fxmlloader1);
+            PuestoFXMLController controlador=fxmlloader1.getController();
+
+            } catch (IOException ex) {
+                Alert a = new Alert(Alert.AlertType.INFORMATION, "No se puede mostrar");
+                a.show();
+            }            
     }
 
 }

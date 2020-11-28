@@ -60,9 +60,7 @@ public class VentanaFXMLController implements Initializable {
         items1.add("Escalofrío");    
         items1.add("tos");
         items1.add("Infarto");        
-        cbxS.setItems(FXCollections.observableArrayList(items1));        
-        
-        
+        cbxS.setItems(FXCollections.observableArrayList(items1));                
     }    
 
     @FXML
@@ -81,6 +79,15 @@ public class VentanaFXMLController implements Initializable {
 
     @FXML
     private void puesto(MouseEvent event) {
+        try {
+            FXMLLoader fxmlloader1 = App.loadFXMLoad("PuestoFXML");
+            App.setRoot(fxmlloader1);
+            PuestoFXMLController controlador=fxmlloader1.getController();
+
+            } catch (IOException ex) {
+                Alert a = new Alert(Alert.AlertType.INFORMATION, "No se puede mostrar");
+                a.show();
+            }            
     }
 
     @FXML

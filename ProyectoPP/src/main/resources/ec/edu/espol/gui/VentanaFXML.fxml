@@ -48,6 +48,11 @@
                   <Font name="Times New Roman" size="13.0" />
                </font>
             </Text>
+            <Text layoutX="28.0" layoutY="274.0" strokeType="OUTSIDE" strokeWidth="0.0" text="PUESTO">
+               <font>
+                  <Font name="Times New Roman" size="13.0" />
+               </font>
+            </Text>
          </children></AnchorPane>
       <AnchorPane layoutX="133.0" layoutY="58.0" prefHeight="290.0" prefWidth="430.0" style="-fx-background-color: lightGray;">
          <children>
