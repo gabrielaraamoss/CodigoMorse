@@ -188,7 +188,6 @@ public class BT<E> {
         }
     }
 
-    
 
     public static PriorityQueue<LinkedList<String>> read(String archivo) {
     	PriorityQueue<LinkedList<String>> cola = new PriorityQueue<LinkedList<String>>((LinkedList<String> e1, LinkedList<String> e2) -> e1.size() - e2.size());
@@ -221,8 +220,8 @@ public class BT<E> {
         arbol.root= new Node<>("INICIO");
         while(!datos.isEmpty()) {
         	LinkedList<String> codigo = datos.poll();
-//        	String letra = codigo.removeFirst();
-                add(codigo,new Node<>(codigo.removeFirst()),arbol.root);
+        	String letra = codigo.removeFirst();
+                add(codigo,new Node<>(letra),arbol.root);
         }
         return arbol;
     }
@@ -243,7 +242,7 @@ public class BT<E> {
     	}
     	return true;
     }
-    
+
     public static String codificarMorse(String palabra) {
     	BT<String> arbol = crearArbolMorse();
     	StringBuilder sb = new StringBuilder();
@@ -255,7 +254,7 @@ public class BT<E> {
     
 
     
-    private static StringBuilder search( Node<String> nDere,Node<String> nIzq,char letra, StringBuilder sb) {
+    private static StringBuilder search( Node<String> nIzq,Node<String> nDere,char letra, StringBuilder sb) {
     	if(searchNode(String.valueOf(letra), nIzq) != null) {
     		sb.append("-");
     		search( nIzq.left, nIzq.right,letra, sb);
@@ -267,14 +266,19 @@ public class BT<E> {
     }
     
     
-    private static Node<String> searchNode(String s, Node<String> n){
-        if(n == null) return null;
-        else if(n.data.equals(s))
-            return n;
-        Node<String> l = searchNode(s, n.left);
-        if(l != null)
-            return l;
-        return searchNode(s, n.right);
-    }    
  
+        private static Node<String> searchNode(String s, Node<String> p) {
+        if (p == null) {
+            return p;
+        } else if (p.data.equals(s)) {
+            return p;
+        } else {
+            Node<String> nleft = searchNode(s, p.left);
+            if (nleft != null) {
+                return nleft;
+            }
+            return searchNode(s, p.right);
+        }
+    }
+
 }
