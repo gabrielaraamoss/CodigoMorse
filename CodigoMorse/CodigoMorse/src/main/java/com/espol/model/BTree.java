@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package Estructura;
+package com.espol.model;
 
 import java.io.File;
 import java.util.LinkedList;
@@ -16,12 +16,12 @@ import java.util.Scanner;
  *
  * @author gabrielaramos
  */
-public class BT<E> {
+public class BTree<E> {
 
     private Node<E> root;
     private int current;
 
-    private static class Node<E> {
+    public static class Node<E> {
 
         private E data;
         private Node<E> left;
@@ -30,6 +30,32 @@ public class BT<E> {
         public Node(E data) {
             this.data = data;
         }
+
+        public E getData() {
+            return data;
+        }
+
+        public void setData(E data) {
+            this.data = data;
+        }
+
+        public Node<E> getLeft() {
+            return left;
+        }
+
+        public void setLeft(Node<E> left) {
+            this.left = left;
+        }
+
+        public Node<E> getRight() {
+            return right;
+        }
+
+        public void setRight(Node<E> right) {
+            this.right = right;
+        }
+        
+        
     }
 
     public boolean isEmpty() {
@@ -137,7 +163,7 @@ public class BT<E> {
         return size(root);
     }
 
-    private int size(Node<E> n) {
+    public int size(Node<E> n) {
         if (n == null) {
             return 0;
         }
@@ -210,13 +236,11 @@ public class BT<E> {
         return cola;
     }
 
-    public static BT<String> crearArbolMorse() {
-        BT<String> arbol = new BT<>();        
-        
-    	PriorityQueue<LinkedList<String>> datos = read("traducciones.txt");
+    public static BTree<String> crearArbolMorse() {
+        BTree<String> arbol = new BTree<>();        
+    	PriorityQueue<LinkedList<String>> datos = read("codigosMorse");
     	if(datos == null)
-            return null;
-        
+            return null;   
         arbol.root= new Node<>("INICIO");
         while(!datos.isEmpty()) {
         	LinkedList<String> codigo = datos.poll();
@@ -244,7 +268,7 @@ public class BT<E> {
     }
 
     public static String codificarMorse(String palabra) {
-    	BT<String> arbol = crearArbolMorse();
+    	BTree<String> arbol = crearArbolMorse();
     	StringBuilder sb = new StringBuilder();
     	for(int i = 0; i < palabra.length(); i++) {
             sb = search( arbol.root.left, arbol.root.right,palabra.toUpperCase().charAt(i), sb);
@@ -280,5 +304,12 @@ public class BT<E> {
             return searchNode(s, p.right);
         }
     }
+    
 
+    public Node<E> getRoot() {
+        return root;
+    }
+
+    
+        
 }

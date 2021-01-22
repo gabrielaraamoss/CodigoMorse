@@ -1,13 +1,12 @@
-module ec.edu.espol.gui {
+module com.espol.proyectoarboles1 {
     requires javafx.controls;
     requires javafx.fxml;
     requires java.base;
-    requires javafx.media;
-    
 
-    opens ec.edu.espol.gui to javafx.fxml;
-    exports ec.edu.espol.gui;
-    
-    opens Estructura to javafx.fxml;
-    exports Estructura;
+    opens com.espol.proyectoarboles1 to javafx.fxml;
+    exports com.espol.proyectoarboles1;
+    opens com.espol.controller to javafx.fxml;
+    exports com.espol.controller;
+    opens com.espol.model to javafx.fxml;
+    exports com.espol.model;
 }

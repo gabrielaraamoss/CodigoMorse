@@ -1,6 +1,5 @@
-package ec.edu.espol.gui;
+package com.espol.proyectoarboles1;
 
-import Estructura.BT;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -18,15 +17,9 @@ public class App extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        scene = new Scene(loadFXML("primary"), 640, 480);
+        scene = new Scene(loadFXML("VentanaPrincipalFXML"));
         stage.setScene(scene);
         stage.show();
-        
-        System.out.println(BT.read("traducciones.txt"));
-        BT<String> arbol = BT.crearArbolMorse();
-        arbol.anchura();
-        System.out.println(BT.codificarMorse("Gabriela"));        
-        
     }
 
     static void setRoot(String fxml) throws IOException {
@@ -39,9 +32,7 @@ public class App extends Application {
     }
 
     public static void main(String[] args) {
-        System.setProperty("org.graphstream.ui", "javafx");
         launch();
     }
-    
 
 }
