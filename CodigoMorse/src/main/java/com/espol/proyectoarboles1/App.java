@@ -7,6 +7,8 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import javafx.application.Platform;
+import javafx.stage.WindowEvent;
 
 /**
  * JavaFX App
@@ -19,6 +21,10 @@ public class App extends Application {
     public void start(Stage stage) throws IOException {
         scene = new Scene(loadFXML("VentanaPrincipalFXML"));
         stage.setScene(scene);
+        stage.setOnCloseRequest((WindowEvent t) -> {
+             Platform.exit();
+             System.exit(0);
+         });
         stage.show();
     }
 

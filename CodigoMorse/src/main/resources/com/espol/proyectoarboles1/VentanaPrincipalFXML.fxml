@@ -11,7 +11,7 @@
       <Button focusTraversable="false" layoutX="712.0" layoutY="28.0" mnemonicParsing="false" onAction="#bajarArbol" text="Ingresar" />
       <TextField fx:id="textoEntrada" layoutX="458.0" layoutY="28.0" />
       <AnchorPane fx:id="lienzo" layoutX="3.0" layoutY="67.0" prefHeight="448.0" prefWidth="1145.0" />
-      <Label fx:id="textResultado" layoutX="483.0" layoutY="516.0" prefHeight="51.0" prefWidth="239.0" textFill="WHITE">
+      <Label fx:id="textResultado" layoutX="381.0" layoutY="515.0" prefHeight="51.0" prefWidth="456.0" textAlignment="CENTER" textFill="WHITE">
          <font>
             <Font size="42.0" />
          </font>

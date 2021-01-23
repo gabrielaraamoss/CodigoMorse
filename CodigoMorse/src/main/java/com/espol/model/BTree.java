@@ -235,8 +235,7 @@ public class BTree<E> {
 
 
     public static PriorityQueue<LinkedList<String>> read(String archivo) {
-    	PriorityQueue<LinkedList<String>> cola = new PriorityQueue<LinkedList<String>>((LinkedList<String> e1, LinkedList<String> e2) -> e1.size() - e2.size());
-        
+    	PriorityQueue<LinkedList<String>> cola = new PriorityQueue<>((LinkedList<String> e1, LinkedList<String> e2) -> e1.size() - e2.size());
         File f = new File(archivo);
         try (Scanner sc = new Scanner(f)) {
             while (sc.hasNextLine()) {
@@ -251,7 +250,6 @@ public class BTree<E> {
         } catch (Exception ex) {
             System.out.println(ex.getMessage());
         }
-        
         return cola;
     }
 
@@ -260,7 +258,7 @@ public class BTree<E> {
     	PriorityQueue<LinkedList<String>> datos = read("codigosMorse");
     	if(datos == null)
             return null;   
-        arbol.root= new Node<>("INICIO");
+        arbol.root= new Node<>("");
         while(!datos.isEmpty()) {
         	LinkedList<String> codigo = datos.poll();
         	String letra = codigo.removeFirst();

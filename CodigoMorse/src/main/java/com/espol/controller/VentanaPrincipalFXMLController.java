@@ -18,12 +18,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.media.AudioClip;
 import javafx.scene.paint.Paint;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Line;
 import javafx.scene.text.Text;
-import javafx.scene.media.Media;
-import javafx.scene.media.MediaPlayer;
 
 /**
  * FXML Controller class
@@ -51,27 +50,27 @@ public class VentanaPrincipalFXMLController implements Initializable {
     private  int tamañaPalabra;
     private Queue<String> codigoMorse;
     private String caracter;
-    private  Media punto;
-    private Media raya;
-    private MediaPlayer player;
-    private double radio;
-    private String rojo = "#ee2222";
-    private String azul= "#2293f5";
+    private AudioClip Sonidopunto;
+    private AudioClip Sonidoraya;
+    private final double radio=20;
+    private final String rojo = "#ee2222";
+    private final String azul= "#2293f5";
+    private final String fontStyle ="-fx-font:26 Arial;";
     
     /**
      * Initializes the controller class.
+     * @param url
+     * @param rb
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {       
-        punto = new Media(Paths.get("punto.mp3").toUri().toString());
-        raya = new Media(Paths.get("raya.mp3").toUri().toString());
+    public void initialize(URL url, ResourceBundle rb) {     
+        Sonidopunto  = new AudioClip(Paths.get("punto.mp3").toUri().toString());
+        Sonidoraya = new AudioClip(Paths.get("raya.mp3").toUri().toString());
         y = lienzo.getLayoutY();
         x = (lienzo.getPrefWidth()/2)+40;
         tree = BTree.crearArbolMorse();
         nodo = tree.getRoot();
         drawTree(x, y, nodo);
-
-        
     }    
 
     @FXML
@@ -87,63 +86,47 @@ public class VentanaPrincipalFXMLController implements Initializable {
                     while (!codigoMorse.isEmpty()) {
                         caracter = codigoMorse.poll();
                         if (caracter.equals(".")) {
-                            drawLine(nodo,nodo.getRight(),azul);
-                            nodo = nodo.getRight(); 
-                            player = new MediaPlayer(punto);
-                            player.play();
+                            drawLineRunLater(nodo,nodo.getRight(),azul);
+                            nodo = nodo.getRight();
+                            Sonidopunto.play();
                             Thread.sleep(1000);
-                            removeLine();
+                            removeLineRunLater();
                         } else {
-                            drawLine(nodo,nodo.getLeft(),rojo);
-                            nodo = nodo.getLeft(); 
-                            player = new MediaPlayer(raya);
-                            player.play();
-                            Thread.sleep(1000);
-                            removeLine();
+                            drawLineRunLater(nodo,nodo.getLeft(),rojo);
+                            nodo = nodo.getLeft();
+                            Sonidoraya.play();
+                            Thread.sleep(1300);
+                            removeLineRunLater();
                         }
                     }
-                    addLetra(letra);
+                    addLetraRunLater(letra);
+                    drawNodeRunLater(nodo);
                     nodo = tree.getRoot();
                     Thread.sleep(1000);
+                    removeNodeRunLater();
                 } catch (InterruptedException ex) {
-                    ex.printStackTrace();
+                    System.out.println(ex.getMessage());
                 }
-
             }
-
         }).start();
+        
     }
 
     private void drawTree(double xInicial, double yInicial, BTree.Node<String> nodo){
-        radio = 20;
-        vertice = new Circle(xInicial, yInicial, radio, Paint.valueOf("#cc525a"));
-        nodo.setPosicionX(xInicial);
-        nodo.setPosicionY(yInicial);
-        vertice.setStroke(Paint.valueOf("black"));
-        vertice.setStrokeWidth(3);
-        data = new Text(xInicial - 5, yInicial+3, nodo.getData());
-        lienzo.getChildren().add(vertice);
-        lienzo.getChildren().add(data);
+        drawNode(xInicial, yInicial, nodo);
         if (nodo.getLeft() != null) {
             distancia = (tree.size(nodo.getLeft())+1)*13;
-            arista = new Line(xInicial, yInicial+radio, xInicial - distancia, yInicial + 60-radio);
-            arista.setStroke(Paint.valueOf("white"));
-            arista.setStrokeWidth(3);
-            data = new Text(xInicial, yInicial, nodo.getData());
-            lienzo.getChildren().add(arista);
+            drawLine(xInicial, yInicial, -distancia);
             drawTree(xInicial - distancia, yInicial + 60, nodo.getLeft());
         }
         if (nodo.getRight() != null) {
             distancia = (tree.size(nodo.getRight())+1)*10;
-            arista = new Line(xInicial, yInicial+radio, xInicial + distancia, yInicial + 60-radio);
-            arista.setStroke(Paint.valueOf("white"));
-            arista.setStrokeWidth(3);
-            lienzo.getChildren().add(arista);
+            drawLine(xInicial, yInicial, distancia);
             drawTree(xInicial + distancia, yInicial +60, nodo.getRight());
         }
     }
     
-    private void drawLine(Node<String> nodoInicial, Node<String>nodoFinal,String color){
+    private void drawLineRunLater(Node<String> nodoInicial, Node<String>nodoFinal,String color){
         Platform.runLater(()->{
             arista = new Line(nodoInicial.getPosicionX(), nodoInicial.getPosicionY()+radio, 
                     nodoFinal.getPosicionX(), nodoFinal.getPosicionY()-radio);
@@ -153,14 +136,54 @@ public class VentanaPrincipalFXMLController implements Initializable {
         });
     }
     
+    private void drawLine(double x , double y ,double distancia){
+        arista = new Line(x, y+radio, x + distancia, y + 60-radio);
+            arista.setStroke(Paint.valueOf("white"));
+            arista.setStrokeWidth(3);
+            lienzo.getChildren().add(arista);
+    }
     
-    private void  removeLine(){
+    
+    private void  removeLineRunLater(){
         Platform.runLater(()->{
             lienzo.getChildren().remove(arista);
         });
     }
     
-    private  void addLetra(char letra){
+    private void drawNodeRunLater(Node<String> nodo){
+        Platform.runLater(()->{
+            vertice = new Circle(nodo.getPosicionX(),nodo.getPosicionY(), radio, 
+                    Paint.valueOf("white"));
+            vertice.setStroke(Paint.valueOf("red"));
+            vertice.setStrokeWidth(3);
+            data = new Text(nodo.getPosicionX() - 8, nodo.getPosicionY()+7, 
+                    nodo.getData());
+            data.setStyle(fontStyle);
+            lienzo.getChildren().add(vertice);
+            lienzo.getChildren().add(data);
+            
+        });
+    }
+    
+    private void drawNode(double x ,double y , Node<String> nodo){
+        vertice = new Circle(x, y, radio, Paint.valueOf("#cc525a"));
+        nodo.setPosicionX(x);
+        nodo.setPosicionY(y);
+        vertice.setStroke(Paint.valueOf("black"));
+        vertice.setStrokeWidth(3);
+        data = new Text(x - 8, y+7, nodo.getData());
+        data.setStyle(fontStyle);
+        lienzo.getChildren().add(vertice);
+        lienzo.getChildren().add(data);
+    }
+    
+    private void  removeNodeRunLater(){
+        Platform.runLater(()->{
+            lienzo.getChildren().remove(vertice);
+        });
+    }
+    
+    private  void addLetraRunLater(char letra){
         Platform.runLater(()->{
             textResultado.setText(textResultado.getText()+
                             letra+" ");
