@@ -9,6 +9,7 @@ import com.espol.model.BTree;
 import com.espol.model.BTree.Node;
 import java.net.URL;
 import java.nio.file.Paths;
+import java.util.LinkedList;
 import java.util.Queue;
 import java.util.ResourceBundle;
 import javafx.application.Platform;
@@ -56,6 +57,7 @@ public class VentanaPrincipalFXMLController implements Initializable {
     private final String rojo = "#ee2222";
     private final String azul= "#2293f5";
     private final String fontStyle ="-fx-font:26 Arial;";
+    private LinkedList<Circle> nodosPintado = new LinkedList<>();
     
     /**
      * Initializes the controller class.
@@ -75,6 +77,7 @@ public class VentanaPrincipalFXMLController implements Initializable {
 
     @FXML
     private void bajarArbol(ActionEvent event) {
+        removeNodes();
         palabra = textoEntrada.getText().toUpperCase();
         tamañaPalabra = palabra.length();
         textResultado.setText("");
@@ -103,7 +106,6 @@ public class VentanaPrincipalFXMLController implements Initializable {
                     drawNodeRunLater(nodo);
                     nodo = tree.getRoot();
                     Thread.sleep(1000);
-                    removeNodeRunLater();
                 } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
                 }
@@ -161,7 +163,7 @@ public class VentanaPrincipalFXMLController implements Initializable {
             data.setStyle(fontStyle);
             lienzo.getChildren().add(vertice);
             lienzo.getChildren().add(data);
-            
+            nodosPintado.add(vertice);
         });
     }
     
@@ -188,6 +190,13 @@ public class VentanaPrincipalFXMLController implements Initializable {
             textResultado.setText(textResultado.getText()+
                             letra+" ");
         });
+    }
+    
+    private void removeNodes(){
+        nodosPintado.forEach(item -> {
+            lienzo.getChildren().remove(item);
+        });
+            
     }
 
 }
