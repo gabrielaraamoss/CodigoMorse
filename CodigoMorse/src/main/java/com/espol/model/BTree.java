@@ -11,6 +11,7 @@ import java.util.ListIterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
+import java.util.Stack;
 
 /**
  *
@@ -26,7 +27,9 @@ public class BTree<E> {
         private E data;
         private Node<E> left;
         private Node<E> right;
-
+        private double posicionX;
+        private double posicionY;
+        
         public Node(E data) {
             this.data = data;
         }
@@ -53,6 +56,22 @@ public class BTree<E> {
 
         public void setRight(Node<E> right) {
             this.right = right;
+        }
+
+        public double getPosicionX() {
+            return posicionX;
+        }
+
+        public void setPosicionX(double posicionX) {
+            this.posicionX = posicionX;
+        }
+
+        public double getPosicionY() {
+            return posicionY;
+        }
+
+        public void setPosicionY(double posicionY) {
+            this.posicionY = posicionY;
         }
         
         
@@ -267,26 +286,24 @@ public class BTree<E> {
     	return true;
     }
 
-    public static String codificarMorse(String palabra) {
+    public static Queue<String> codificarMorse(char palabra) {
     	BTree<String> arbol = crearArbolMorse();
-    	StringBuilder sb = new StringBuilder();
-    	for(int i = 0; i < palabra.length(); i++) {
-            sb = search( arbol.root.left, arbol.root.right,palabra.toUpperCase().charAt(i), sb);
-    	}
-    	return sb.toString();
+    	Queue<String> sb = new LinkedList<>();
+        search( arbol.root.left, arbol.root.right,palabra, sb);
+    	return sb;
     }
     
 
     
-    private static StringBuilder search( Node<String> nIzq,Node<String> nDere,char letra, StringBuilder sb) {
+    private static void  search( Node<String> nIzq,Node<String> nDere,char letra,
+           Queue<String> sb) {
     	if(searchNode(String.valueOf(letra), nIzq) != null) {
-    		sb.append("-");
+    		sb.offer("-");
     		search( nIzq.left, nIzq.right,letra, sb);
     	}else if(searchNode(String.valueOf(letra), nDere) != null) {
-    		sb.append(".");
+    		sb.offer(".");
     		search( nDere.left, nDere.right,letra, sb);
     	}
-    	return sb;
     }
     
     
