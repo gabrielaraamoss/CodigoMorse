@@ -39,16 +39,11 @@ public class VentanaPrincipalFXMLController implements Initializable {
     @FXML
     private Label textResultado;
     
-    private double x;
-    private double y;
     Node<String> nodo;
     private Circle vertice;
     private Line arista;
     private Text data;
-    private double distancia;
     private BTree<String> tree;
-    private String palabra;
-    private  int tamañaPalabra;
     private Queue<String> codigoMorse;
     private String caracter;
     private AudioClip Sonidopunto;
@@ -57,7 +52,7 @@ public class VentanaPrincipalFXMLController implements Initializable {
     private final String rojo = "#ee2222";
     private final String azul= "#2293f5";
     private final String fontStyle ="-fx-font:26 Arial;";
-    private LinkedList<Circle> nodosPintado = new LinkedList<>();
+    private final LinkedList<Circle> nodosPintado = new LinkedList<>();
     
     /**
      * Initializes the controller class.
@@ -68,8 +63,8 @@ public class VentanaPrincipalFXMLController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {     
         Sonidopunto  = new AudioClip(Paths.get("punto.mp3").toUri().toString());
         Sonidoraya = new AudioClip(Paths.get("raya.mp3").toUri().toString());
-        y = lienzo.getLayoutY();
-        x = (lienzo.getPrefWidth()/2)+40;
+        double y = lienzo.getLayoutY();
+        double x = (lienzo.getPrefWidth()/2)+40;
         tree = BTree.crearArbolMorse();
         nodo = tree.getRoot();
         drawTree(x, y, nodo);
@@ -78,13 +73,12 @@ public class VentanaPrincipalFXMLController implements Initializable {
     @FXML
     private void bajarArbol(ActionEvent event) {
         removeNodes();
-        palabra = textoEntrada.getText().toUpperCase();
-        tamañaPalabra = palabra.length();
+        String palabra = textoEntrada.getText().toUpperCase();
         textResultado.setText("");
         new Thread(() -> {
-            for (int i = 0; i < tamañaPalabra; i++) {
+            for (int i = 0; i < palabra.length(); i++) {
                 char letra = palabra.charAt(i);
-                codigoMorse = BTree.codificarMorse(letra);
+                codigoMorse = BTree.codificarMorse(letra,tree);
                 try {
                     while (!codigoMorse.isEmpty()) {
                         caracter = codigoMorse.poll();
@@ -108,6 +102,7 @@ public class VentanaPrincipalFXMLController implements Initializable {
                     Thread.sleep(1000);
                 } catch (InterruptedException ex) {
                     System.out.println(ex.getMessage());
+                    Thread.currentThread().interrupt();
                 }
             }
         }).start();
@@ -116,6 +111,7 @@ public class VentanaPrincipalFXMLController implements Initializable {
 
     private void drawTree(double xInicial, double yInicial, BTree.Node<String> nodo){
         drawNode(xInicial, yInicial, nodo);
+        double distancia;
         if (nodo.getLeft() != null) {
             distancia = (tree.size(nodo.getLeft())+1)*13;
             drawLine(xInicial, yInicial, -distancia);
@@ -177,12 +173,6 @@ public class VentanaPrincipalFXMLController implements Initializable {
         data.setStyle(fontStyle);
         lienzo.getChildren().add(vertice);
         lienzo.getChildren().add(data);
-    }
-    
-    private void  removeNodeRunLater(){
-        Platform.runLater(()->{
-            lienzo.getChildren().remove(vertice);
-        });
     }
     
     private  void addLetraRunLater(char letra){

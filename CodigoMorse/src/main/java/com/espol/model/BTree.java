@@ -6,12 +6,13 @@
 package com.espol.model;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Arrays;
+import java.util.Iterator;
 import java.util.LinkedList;
-import java.util.ListIterator;
 import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.Scanner;
-import java.util.Stack;
 
 /**
  *
@@ -20,7 +21,6 @@ import java.util.Stack;
 public class BTree<E> {
 
     private Node<E> root;
-    private int current;
 
     public static class Node<E> {
 
@@ -72,110 +72,15 @@ public class BTree<E> {
 
         public void setPosicionY(double posicionY) {
             this.posicionY = posicionY;
-        }
-        
-        
+        }  
     }
-
+    
+    public Node<E> getRoot() {
+        return root;
+    }
+    
     public boolean isEmpty() {
         return root == null;
-    }
-
-    public boolean add(E element, E parent) {
-        if (element == null) {
-            return false;
-        }
-        Node<E> child = new Node<>(element);
-        if (isEmpty() && parent == null) {
-            root = child;
-            current++;
-            return true;
-        }
-        Node<E> nParent = searchNode(parent);
-        return addingNode(child, nParent);
-    }
-
-    private boolean addingNode(Node<E> child, Node<E> nParent) {
-        if (searchNode(child.data) == null && nParent != null) {
-            if (nParent.left == null) {
-                nParent.left = child;
-                current++;
-                return true;
-            } else if (nParent.right == null) {
-                nParent.right = child;
-                current++;
-                return true;
-            }
-        }
-        return false;
-    }
-
-    private Node<E> searchNode(E data) {
-        return searchNode(data, root);
-    }
-
-    private Node<E> searchNode(E data, Node<E> p) {
-        if (p == null) {
-            return p;
-        } else if (p.data.equals(data)) {
-            return p;
-        } else {
-            Node<E> nleft = searchNode(data, p.left);
-            if (nleft != null) {
-                return nleft;
-            }
-            return searchNode(data, p.right);
-        }
-    }
-
-    public boolean remove(E data) {
-        if (data == null) {
-            return false;
-        }
-        Node<E> parent = searchParent(data);
-        if (parent == null) {
-            return false;
-        } else if (parent.left != null && parent.left.data.equals(data)) {
-            parent.left = null;
-        } else {
-            parent.right = null;
-        }
-        current--;
-        return true;
-    }
-
-    private Node<E> searchParent(E data) {
-        return searchParent(data, root);
-    }
-
-    private Node<E> searchParent(E data, Node<E> n) {
-        if (n == null) {
-            return n;
-        } else if ((n.left != null && n.left.data.equals(data)) || (n.right != null && n.right.data.equals(data))) {
-            return n;
-        } else {
-            Node<E> nleft = searchParent(data, n.left);
-            if (nleft != null) {
-                return nleft;
-            }
-            return searchParent(data, n.right);
-        }
-    }
-
-    public boolean contains(E element) {
-        if (element == null) {
-            return false;
-        }
-        return contains(root, element);
-    }
-
-    private boolean contains(Node<E> n, E element) {
-        if (n == null) {
-            return false;
-        } else if (n.data.equals(element)) {
-            return true;
-        }
-        return contains(n.left, element) || contains(n.right, element);
     }
 
     public int size() {
@@ -188,33 +93,7 @@ public class BTree<E> {
         }
         return 1 + size(n.left) + size(n.right);
     }
-
-
-    private void postOrden(Node<E> n) {
-        if (n != null) {
-            postOrden(n.left);
-            postOrden(n.right);
-            System.out.println(n.data);
-
-        }
-    }
-
-    private void preOrden(Node<E> n) {
-        if (n != null) {
-            System.out.println(n.data);
-            preOrden(n.left);
-            preOrden(n.right);
-        }
-    }
-
-    private void inOrden(Node<E> n) {
-        if (n != null) {
-            inOrden(n.left);
-            System.out.println(n.data);
-            inOrden(n.right);
-        }
-    }
-
+    
     public void anchura() {
         if (!isEmpty()) {
             Queue<Node<E>> cola = new LinkedList<>();
@@ -233,21 +112,18 @@ public class BTree<E> {
         }
     }
 
-
     public static PriorityQueue<LinkedList<String>> read(String archivo) {
     	PriorityQueue<LinkedList<String>> cola = new PriorityQueue<>((LinkedList<String> e1, LinkedList<String> e2) -> e1.size() - e2.size());
         File f = new File(archivo);
-        try (Scanner sc = new Scanner(f)) {
+        try (Scanner sc = new Scanner(f);) {
             while (sc.hasNextLine()) {
                 LinkedList<String> lista = new LinkedList<>();
             	String[] info = sc.nextLine().split(":");
                 lista.add(info[0]);
-                for (String s : info[1].split("\\|")) {
-                    lista.add(s);
-                }
+                lista.addAll(Arrays.asList(info[1].split("\\|")));
                 cola.offer(lista);
             }
-        } catch (Exception ex) {
+        } catch (FileNotFoundException ex) {
             System.out.println(ex.getMessage());
         }
         return cola;
@@ -256,75 +132,67 @@ public class BTree<E> {
     public static BTree<String> crearArbolMorse() {
         BTree<String> arbol = new BTree<>();        
     	PriorityQueue<LinkedList<String>> datos = read("codigosMorse");
-    	if(datos == null)
+    	if(datos.isEmpty())
             return null;   
-        arbol.root= new Node<>("");
+        arbol.root= new Node<>(" ");
         while(!datos.isEmpty()) {
         	LinkedList<String> codigo = datos.poll();
         	String letra = codigo.removeFirst();
-                add(codigo,new Node<>(letra),arbol.root);
+                Node<String> l = new Node<>(letra);
+                addNode(arbol.root,l,codigo);
         }
         return arbol;
     }
     
-    private static boolean add( LinkedList<String> value,Node<String> letra, Node<String> p) {
-    	ListIterator<String> it = value.listIterator();
-
+    
+    private static boolean addNode(  Node<String> p, Node<String> letra,LinkedList<String> lista) {
+    	if(letra == null && p == null ) return false;
+        if(lista.isEmpty()) return false;
+        Iterator<String> it = lista.iterator();
     	while(it.hasNext()) {
-    		 String s = it.next();
-    		 if(!it.hasNext()) {
-    			 if(s.equals(".")) p.right=letra;
-    			 else p.left =letra;
-
-    		 } else {
-    			 if(s.equals(".")) p = p.right;
-    			 else p = p.left;
-    		 }
+    		String s = it.next();
+    		if(!it.hasNext()) {
+                    if(s.equals(".")) p.right=letra;
+            	    else p.left =letra;
+    		}
+                if(s.equals(".")) p = p.right;
+                else p = p.left;	 
     	}
     	return true;
     }
 
-    public static Queue<String> codificarMorse(char palabra) {
-    	BTree<String> arbol = crearArbolMorse();
-    	Queue<String> sb = new LinkedList<>();
-        search( arbol.root.left, arbol.root.right,palabra, sb);
-    	return sb;
+    public static Queue<String> codificarMorse(char letra,BTree<String> arbol) {
+        Queue<String> cola = new LinkedList<>();
+        if(!arbol.isEmpty()){
+            search( arbol.root.left, arbol.root.right,letra, cola);
+        }
+    	return cola;
     }
     
-
-    
-    private static void  search( Node<String> nIzq,Node<String> nDere,char letra,
-           Queue<String> sb) {
-    	if(searchNode(String.valueOf(letra), nIzq) != null) {
-    		sb.offer("-");
-    		search( nIzq.left, nIzq.right,letra, sb);
-    	}else if(searchNode(String.valueOf(letra), nDere) != null) {
-    		sb.offer(".");
-    		search( nDere.left, nDere.right,letra, sb);
-    	}
-    }
-    
-    
- 
-        private static Node<String> searchNode(String s, Node<String> p) {
+    private static Node<String> searchNode(String s, Node<String> p) {
         if (p == null) {
             return p;
         } else if (p.data.equals(s)) {
             return p;
         } else {
-            Node<String> nleft = searchNode(s, p.left);
-            if (nleft != null) {
-                return nleft;
+            if (searchNode(s, p.left) != null) {
+                return searchNode(s, p.left);
             }
             return searchNode(s, p.right);
         }
     }
-    
-
-    public Node<E> getRoot() {
-        return root;
-    }
-
-    
+           
+    private static void  search( Node<String> nIzq,Node<String> nDere,char letra, Queue<String> cola) {
+        String s = String.valueOf(letra);
+    	if(searchNode(s, nDere) != null) {
+    		cola.offer(".");
+    		search( nDere.left, nDere.right,letra, cola);
+    	}
+    	else if(searchNode(s, nIzq) != null) {
+    		cola.offer("-");
+    		search( nIzq.left, nIzq.right,letra, cola);
+        }
         
+    }    
+ 
 }
